@@ -1,0 +1,100 @@
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+struct link{
+    int info;
+    struct link *left; 
+    struct link *right;
+};
+struct link *binary(int *list, int lower, int upper){
+    int mid = (lower + upper)/2;
+    link *temp = new link;
+    temp->info = list[mid];
+    if(lower >= upper){
+        temp->left = NULL;
+        temp->right = NULL;
+        return temp;
+    }
+    if(lower <= mid-1){
+        temp->left = binary(list, lower, mid-1);
+    }
+    else
+        temp->left = NULL;
+    if(mid+1 <= upper){
+        temp->right = binary(list, mid+1, upper);
+    }
+    else
+        temp->right = NULL;
+    return temp;
+
+}
+void output(struct link *t, int level){
+    int i;
+    if(t){
+        output(t->right, level+1);
+        cout<<endl;
+        for(i=0; i<level; i++){
+            cout<<" ";
+        }
+        cout<<t->info;
+        output(t->left, level+1);
+    }
+}
+void preorder(struct link *node){
+    if(node){
+        cout<<node->info<<" ";
+        if(node->left!=NULL)
+        preorder(node->left);
+        if(node->right!=NULL)
+        preorder(node->right);
+    }
+}
+void postorder(struct link *node){
+    if(node){
+        if(node->left!=NULL)
+        postorder(node->left);
+        if(node->right!=NULL)
+        postorder(node->right);
+        cout<<node->info<<" ";
+    }
+}
+void inorder(struct link *node){
+    if(node){
+        if(node->left!=NULL)
+        inorder(node->left);
+        cout<<node->info<<" ";
+        if(node->right!=NULL)
+        inorder(node->right);
+    }
+}
+int main(){
+    int list[100];
+    int number = 0;
+    int info;
+    char ch = 'y';
+    struct link *t;
+    t = NULL;
+    while(ch == 'y' || ch == 'Y'){
+        cout<<"Enter the value of node: ";
+        cin>>info;
+        list[number++] = info;
+        cout<<"Do you want to create more nodes[Y/N]: ";
+        cin>>ch;
+    }
+    cout<<"Number of element in the list: "<<number;
+    number--;   
+    t = binary(list, 0, number);
+    output(t,1);
+    cout<<"Preorder Traversal: ";
+    preorder(t);
+    cout<<endl;
+    cout<<"Postorder Traversal: ";
+    postorder(t);
+    cout<<endl;
+    cout<<"Inorder Traversal: ";
+    inorder(t);
+    cout<<endl;
+
+    return 0;   
+}
+
